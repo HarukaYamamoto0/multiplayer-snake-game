@@ -17,30 +17,31 @@ const game = createGame();
 game.start();
 
 game.subscribe((command) => {
-  sockets.emit(command.type, command);
+	sockets.emit(command.type, command);
 });
 
 sockets.on("connection", (socket) => {
-  const playerId = socket.id;
-  console.log(`> Player connected: ${playerId}`);
+	const playerId = socket.id;
+	const playerName = socket.handshake.query.userName;
+	console.log(`> Player connected: ${playerName}`);
 
-  game.addPlayer({ playerId: playerId });
+	game.addPlayer({ playerId: playerId, playerName: playerName });
 
-  socket.emit("setup", game.state);
+	socket.emit("setup", game.state);
 
-  socket.on("disconnect", () => {
-    game.removePlayer({ playerId: playerId });
-    console.log(`> Player disconnected: ${playerId}`);
-  });
+	socket.on("disconnect", () => {
+		game.removePlayer({ playerId: playerId });
+		console.log(`> Player disconnected: ${playerName}`);
+	});
 
-  socket.on("move-player", (command) => {
-    command.playerId = playerId;
-    command.type = "move-player";
+	socket.on("move-player", (command) => {
+		command.playerId = playerId;
+		command.type = "move-player";
 
-    game.movePlayer(command);
-  });
+		game.movePlayer(command);
+	});
 });
 
 server.listen(PORT, () => {
-  console.log(`> Server listening on port: 3000`);
+	console.log(`> Server listening on port: 3000`);
 });
