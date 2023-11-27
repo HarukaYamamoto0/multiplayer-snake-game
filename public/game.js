@@ -1,159 +1,169 @@
 import { mod } from "./utils.js";
 
 export default function createGame() {
-	const state = {
-		players: {},
-		fruits: {},
-		maxFruits: 20,
-		maximumNumberOfWinners: 3,
-		screen: {
-			width: 25,
-			height: 25,
-		},
-	};
+  const state = {
+    players: {},
+    fruits: {},
+    maxFruits: 20,
+    maximumNumberOfWinners: 3,
+    screen: {
+      width: 25,
+      height: 25,
+    },
+  };
 
-	const observers = [];
+  const observers = [];
 
-	function start() {
-		const frequency = 500;
+  function start() {
+    const frequency = 500;
 
-		setInterval(addFruit, frequency);
-	}
+    setInterval(addFruit, frequency);
+  }
 
-	function subscribe(observerFunction) {
-		observers.push(observerFunction);
-	}
+  function subscribe(observerFunction) {
+    observers.push(observerFunction);
+  }
 
-	function notifyAll(command) {
-		for (const observerFunction of observers) {
-			observerFunction(command);
-		}
-	}
+  function notifyAll(command) {
+    for (const observerFunction of observers) {
+      observerFunction(command);
+    }
+  }
 
-	function setState(newState) {
-		Object.assign(state, newState);
-	}
+  function setState(newState) {
+    Object.assign(state, newState);
+  }
 
-	function addPlayer(command) {
-		const playerId = command.playerId;
-		const playerName = command.playerName;
+  function addPlayer(command) {
+    const playerId = command.playerId;
+    const playerName = command.playerName;
 
-		const playerX = "playerX" in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
-		const playerY = "playerY" in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
-		const score = 0;
+    const bodyX = "playerX" in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
+    const bodyY = "playerY" in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
 
-		state.players[playerId] = {
-			x: playerX,
-			y: playerY,
-			playerName,
-			score,
-		};
+    const player = {
+      playerId,
+      playerName,
+      body: [
+        {
+          x: bodyX,
+          y: bodyY,
+        },
+      ],
+      lastMovement: "ArrowRight",
+      score: 0,
+    };
 
-		notifyAll({
-			type: "add-player",
-			playerId: playerId,
-			playerX: playerX,
-			playerY: playerY,
-			score,
-			playerName,
-		});
-	}
+    state.players[playerId] = player;
 
-	function removePlayer(command) {
-		const playerId = command.playerId;
+    notifyAll({
+      type: "add-player",
+      ...player,
+    });
+  }
 
-		delete state.players[playerId];
+  function removePlayer(command) {
+    const playerId = command.playerId;
 
-		notifyAll({
-			type: "remove-player",
-			playerId: playerId,
-		});
-	}
+    delete state.players[playerId];
 
-	function addFruit(command) {
-		if (Object.keys(state.fruits).length >= state.maxFruits) return;
+    notifyAll({
+      type: "remove-player",
+      playerId: playerId,
+    });
+  }
 
-		const fruitId = command ? command.fruitId : Math.floor(Math.random() * 10000000);
-		const fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width);
-		const fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height);
+  function addFruit(command) {
+    if (Object.keys(state.fruits).length >= state.maxFruits) return;
 
-		state.fruits[fruitId] = {
-			x: fruitX,
-			y: fruitY,
-		};
+    const fruitId = command ? command.fruitId : Math.floor(Math.random() * 10000000);
+    const fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width);
+    const fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height);
 
-		notifyAll({
-			type: "add-fruit",
-			fruitId: fruitId,
-			fruitX: fruitX,
-			fruitY: fruitY,
-		});
-	}
+    state.fruits[fruitId] = {
+      x: fruitX,
+      y: fruitY,
+    };
 
-	function removeFruit(command) {
-		const fruitId = command.fruitId;
+    notifyAll({
+      type: "add-fruit",
+      fruitId: fruitId,
+      fruitX: fruitX,
+      fruitY: fruitY,
+    });
+  }
 
-		delete state.fruits[fruitId];
+  function removeFruit(command) {
+    const fruitId = command.fruitId;
 
-		notifyAll({
-			type: "remove-fruit",
-			fruitId: fruitId,
-		});
-	}
+    delete state.fruits[fruitId];
 
-	function movePlayer(command) {
-		notifyAll(command);
+    notifyAll({
+      type: "remove-fruit",
+      fruitId: fruitId,
+    });
+  }
 
-		const acceptedMoves = {
-			ArrowUp(player) {
-				player.y = mod(state.screen.height, player.y - 1);
-			},
-			ArrowRight(player) {
-				player.x = mod(state.screen.width, player.x + 1);
-			},
-			ArrowDown(player) {
-				player.y = mod(state.screen.height, player.y + 1);
-			},
-			ArrowLeft(player) {
-				player.x = mod(state.screen.width, player.x - 1);
-			},
-		};
+  function movePlayer(command) {
+    notifyAll(command);
 
-		const keyPressed = command.keyPressed;
-		const playerId = command.playerId;
-		const player = state.players[playerId];
-		const moveFunction = acceptedMoves[keyPressed];
+    const acceptedMoves = {
+      ArrowUp(playerId) {
+        state.players[playerId].lastMovement = "ArrowUp";
+        state.players[playerId].body[0].y--;
 
-		if (player && moveFunction) {
-			moveFunction(player);
-			checkForFruitCollision(playerId);
-		}
-	}
+        if (state.players[player].body[0].y === -1) state.players[player].body[0].y += 30;
+      },
+      ArrowRight(playerId) {
+        state.players[playerId].lastMovement = "ArrowRight";
+        state.players[playerId].body[0].x++;
+        if (state.players[playerId].body[0].x === 30) state.players[playerId].body[0].x -= 30;
+      },
+      ArrowDown(playerId) {
+        state.players[playerId].lastMovement = "ArrowDown";
+        state.players[playerId].body[0].y++;
+        if (state.players[playerId].body[0].y === 30) state.players[playerId].body[0].y -= 30;
+      },
+      ArrowLeft(playerId) {
+        state.players[playerId].lastMovement = "ArrowLeft";
+        state.players[playerId].body[0].x--;
+        if (state.players[playerId].body[0].x === -1) state.players[playerId].body[0].x += 30;
+      },
+    };
 
-	function checkForFruitCollision(playerId) {
-		const player = state.players[playerId];
+    const keyPressed = command.keyPressed;
+    const playerId = command.playerId;
+    const player = state.players[playerId];
+    const moveFunction = acceptedMoves[keyPressed];
 
-		for (const fruitId in state.fruits) {
-			const fruit = state.fruits[fruitId];
-			// console.log(`Checking ${playerId} score ${player.score} and ${fruitId}`)
+    if (player && moveFunction) {
+      moveFunction(playerId);
+      checkForFruitCollision(playerId);
+    }
+  }
 
-			if (player.x === fruit.x && player.y === fruit.y) {
-				// console.log(`COLLISION between ${playerId} and ${fruitId}`)
-				removeFruit({ fruitId: fruitId });
-				player.score += 1;
-			}
-		}
-	}
+  function checkForFruitCollision(playerId) {
+    const player = state.players[playerId];
 
-	return {
-		addPlayer,
-		removePlayer,
-		movePlayer,
-		addFruit,
-		removeFruit,
-		state,
-		setState,
-		subscribe,
-		start,
-	};
+    for (const fruitId in state.fruits) {
+      const fruit = state.fruits[fruitId];
+
+      if (player.body[0].x === fruit.x && player.body[0].y === fruit.y) {
+        removeFruit({ fruitId: fruitId });
+        player.score += 1;
+      }
+    }
+  }
+
+  return {
+    addPlayer,
+    removePlayer,
+    movePlayer,
+    addFruit,
+    removeFruit,
+    state,
+    setState,
+    subscribe,
+    start,
+  };
 }
