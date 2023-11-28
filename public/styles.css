@@ -91,12 +91,13 @@ header > h1 {
 
 #score-table #scoretableTitle {
   border-bottom: 1px solid #ccc;
-  padding-bottom: 8px;
-  font-size: 0.8rem;
+  padding: 1vw;
+  font-size: 1rem;
 }
 
 #score-table #scoretablePoints {
   border-bottom: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 #score-table td {

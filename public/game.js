@@ -1,6 +1,6 @@
 import { mod } from "./utils.js";
 
-export default function createGame() {
+export default function createGame(socket) {
   const state = {
     players: {},
     fruits: {},
@@ -52,6 +52,7 @@ export default function createGame() {
       ],
       lastMovement: "ArrowRight",
       score: 0,
+      gameOver: false,
     };
 
     state.players[playerId] = player;
@@ -110,24 +111,28 @@ export default function createGame() {
     const acceptedMoves = {
       ArrowUp(playerId) {
         state.players[playerId].lastMovement = "ArrowUp";
-        state.players[playerId].body[0].y--;
 
-        if (state.players[player].body[0].y === -1) state.players[player].body[0].y += 30;
+        if (state.players[playerId].body[0].y - 1 >= 0) {
+          state.players[playerId].body[0].y--;
+        }
       },
       ArrowRight(playerId) {
         state.players[playerId].lastMovement = "ArrowRight";
-        state.players[playerId].body[0].x++;
-        if (state.players[playerId].body[0].x === 30) state.players[playerId].body[0].x -= 30;
+        if (state.players[playerId].body[0].x + 1 < state.screen.width) {
+          state.players[playerId].body[0].x++;
+        }
       },
       ArrowDown(playerId) {
         state.players[playerId].lastMovement = "ArrowDown";
-        state.players[playerId].body[0].y++;
-        if (state.players[playerId].body[0].y === 30) state.players[playerId].body[0].y -= 30;
+        if (state.players[playerId].body[0].y + 1 < state.screen.height) {
+          state.players[playerId].body[0].y++;
+        }
       },
       ArrowLeft(playerId) {
         state.players[playerId].lastMovement = "ArrowLeft";
-        state.players[playerId].body[0].x--;
-        if (state.players[playerId].body[0].x === -1) state.players[playerId].body[0].x += 30;
+        if (state.players[playerId].body[0].x - 1 >= 0) {
+          state.players[playerId].body[0].x--;
+        }
       },
     };
 
@@ -139,6 +144,13 @@ export default function createGame() {
     if (player && moveFunction) {
       moveFunction(playerId);
       checkForFruitCollision(playerId);
+
+      checkForBorderCollision(playerId);
+
+      for (let i = state.players[playerId].body.length - 1; i > 0; i--) {
+        state.players[playerId].body[i].x = state.players[playerId].body[i - 1].x;
+        state.players[playerId].body[i].y = state.players[playerId].body[i - 1].y;
+      }
     }
   }
 
@@ -151,6 +163,27 @@ export default function createGame() {
       if (player.body[0].x === fruit.x && player.body[0].y === fruit.y) {
         removeFruit({ fruitId: fruitId });
         player.score += 1;
+
+        state.players[playerId].body.push({
+          x: state.players[playerId].body[state.players[playerId].body.length - 1].x,
+          y: state.players[playerId].body[state.players[playerId].body.length - 1].y,
+        });
+      }
+    }
+  }
+
+  function checkForBorderCollision(playerId) {
+    const player = state.players[playerId];
+
+    if (
+      player.body[0].x === 0 ||
+      player.body[0].x === state.screen.width ||
+      player.body[0].y === 0 ||
+      player.body[0].y === state.screen.height
+    ) {
+      if (player.score > 0) {
+        player.body.pop();
+        state.players[playerId].score--;
       }
     }
   }

@@ -17,14 +17,12 @@ const game = createGame();
 game.start();
 
 game.subscribe((command) => {
-  console.log(command.type.toLowerCase());
   sockets.emit(command.type, command);
 });
 
 sockets.on("connection", (socket) => {
   const playerId = socket.id;
   const playerName = socket.handshake.query.userName;
-  console.log(`> Player connected: ${playerName}`);
 
   game.addPlayer({ playerId: playerId, playerName: playerName });
 
@@ -32,7 +30,6 @@ sockets.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     game.removePlayer({ playerId: playerId });
-    console.log(`> Player disconnected: ${playerName}`);
   });
 
   socket.on("move-player", (command) => {

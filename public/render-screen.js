@@ -17,26 +17,30 @@ export default function renderScreen(screen, scoreTable, game, requestAnimationF
   for (const playerId in game.state.players) {
     const player = game.state.players[playerId];
 
-    for (const chunk of player.body) {
-      const { x, y } = chunk;
+    for (let i = 0; player.body.length > i; i++) {
+      const { x, y } = player.body[i];
 
-      context.fillStyle = "#ffffff";
-      context.fillRect(x, y, 1, 1);
-
-      if (player.playerId === playerId) {
+      if (player.playerId === currentPlayerId) {
         context.fillStyle = "red";
         context.fillRect(x, y, 1, 1);
       }
-    }
 
-    context.fillStyle = "#ffffff";
-    context.globalAlpha = 0.4;
-    context.fillRect(player.body[0].x, player.body[0].y, 1, 1);
+      context.fillStyle = "red";
+      context.globalAlpha = 0.4;
+      context.fillRect(x, y, 1, 1);
+
+      if (i === 0) {
+        context.fillStyle = "red";
+        context.globalAlpha = 1;
+        context.fillRect(x, y, 1, 1);
+      }
+    }
   }
 
   for (const fruitId in game.state.fruits) {
     const fruit = game.state.fruits[fruitId];
     context.fillStyle = "green";
+    context.globalAlpha = 1;
     context.fillRect(fruit.x, fruit.y, 1, 1);
   }
 
@@ -68,8 +72,7 @@ function updateScoreTable(scoreTable, game, currentPlayerId) {
     playersArray.push({
       playerId: socketId,
       playerName: player.playerName,
-      x: player.x,
-      y: player.y,
+      body: player.body,
       score: player.score,
     });
   }
