@@ -174,19 +174,36 @@ export default function createGame(socket) {
 
   function checkForBorderCollision(playerId) {
     const player = state.players[playerId];
+    const head = player.body[0];
 
-    if (
-      player.body[0].x === 0 ||
-      player.body[0].x === state.screen.width ||
-      player.body[0].y === 0 ||
-      player.body[0].y === state.screen.height
-    ) {
-      if (player.score > 0) {
-        player.body.pop();
+    // prettier-ignore
+    if (head.x === 0 || head.x === (state.screen.width - 1) || head.y === 0 || head.y === (state.screen.height - 1)) {
+      if (state.players[playerId].score > 0) {
+        state.players[playerId].body.pop();
         state.players[playerId].score--;
       }
     }
   }
+
+  /*
+  function checkCollisionWithAnotherPlayer(playerId) {
+    const player = state.players[playerId];
+
+    for (const anotherPlayerId in state.players) {
+      const anotherPlayer = state.players[anotherPlayerId];
+
+      if (player.body[0].x === anotherPlayer.x && player.body[0].y === anotherPlayer.y) {
+        removeFruit({ fruitId: fruitId });
+        player.score += 1;
+
+        state.players[playerId].body.push({
+          x: state.players[playerId].body[state.players[playerId].body.length - 1].x,
+          y: state.players[playerId].body[state.players[playerId].body.length - 1].y,
+        });
+      }
+    }
+  }
+  */
 
   return {
     addPlayer,

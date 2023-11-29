@@ -20,19 +20,24 @@ export default function renderScreen(screen, scoreTable, game, requestAnimationF
     for (let i = 0; player.body.length > i; i++) {
       const { x, y } = player.body[i];
 
-      if (player.playerId === currentPlayerId) {
-        context.fillStyle = "red";
-        context.fillRect(x, y, 1, 1);
-      }
-
-      context.fillStyle = "red";
+      context.fillStyle = "#8a2be2";
       context.globalAlpha = 0.4;
       context.fillRect(x, y, 1, 1);
 
       if (i === 0) {
-        context.fillStyle = "red";
         context.globalAlpha = 1;
         context.fillRect(x, y, 1, 1);
+      }
+
+      if (player.playerId === currentPlayerId) {
+        context.fillStyle = "red";
+        context.fillRect(x, y, 1, 1);
+
+        if (i === 0) {
+          context.fillStyle = "red";
+          context.globalAlpha = 1;
+          context.fillRect(x, y, 1, 1);
+        }
       }
     }
   }
@@ -96,25 +101,12 @@ function updateScoreTable(scoreTable, game, currentPlayerId) {
       stringFormed +
       `
             <tr class="${player.playerId === currentPlayerId ? "current-player" : ""}">
-                <td>${player.playerName}</td>
-                <td>${player.score}</td>
+                <td class="playerName">${player.playerName}</td>
+                <td class="playerScore">${player.score}</td>
             </tr>
         `
     );
   }, scoreTableInnerHTML);
-
-  const currentPlayerFromTopScore = topScorePlayers[currentPlayerId];
-
-  if (currentPlayerFromTopScore) {
-    scoreTableInnerHTML += `
-    <tr class="current-player">
-      <td>${
-        currentPlayerFromTopScore.playerName === undefined ? currentPlayerId : currentPlayerFromTopScore.playerName
-      }</td>
-      <td>${currentPlayerFromTopScore.score}</td>
-    </tr>
-    `;
-  }
 
   scoreTable.innerHTML = scoreTableInnerHTML;
 }

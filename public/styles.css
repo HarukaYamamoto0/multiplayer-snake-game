@@ -37,7 +37,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 15vh;
+  padding-top: 13vh;
   text-align: center;
 }
 
@@ -60,7 +60,30 @@ header > h1 {
   text-align: center;
   color: var(--text);
   margin: 5px;
-  font-size: 2rem;
+  font-size: 1.8rem;
+}
+
+#score-table {
+  vertical-align: top;
+  display: inline-block;
+  margin-bottom: 7vh;
+  max-height: 200px;
+  font-family: "Cinzel", serif;
+}
+
+#score-table #scoretableTitle {
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+#score-table #scoretablePoints {
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+#score-table td {
+  padding-top: 15px;
+  padding-bottom: 5px;
 }
 
 #screen {
@@ -81,50 +104,33 @@ header > h1 {
   vertical-align: top;
 }
 
-#score-table {
-  vertical-align: top;
-  display: inline-block;
-  margin-bottom: 7vh;
-  max-height: 200px;
-  font-family: "Cinzel", serif;
+@media screen and (max-width: 375px) {
+  header > h1 {
+    font-size: 1.3rem;
+  }
+
+  #score-table #scoretableTitle {
+    font-size: 1rem;
+  }
+
+  #score-table #scoretablePoints {
+    font-size: 1rem;
+  }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 0.8rem;
+  }
 }
 
-#score-table #scoretableTitle {
-  border-bottom: 1px solid #ccc;
-  padding: 1vw;
-  font-size: 1rem;
+@media screen and (max-width: 390px) {
+  header > h1 {
+    font-size: 1.4rem;
+  }
 }
 
-#score-table #scoretablePoints {
-  border-bottom: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-#score-table td {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-#score-table .socket-id {
-  font-weight: normal;
-  color: #222;
-  width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-}
-
-#score-table .score-value {
-  font-weight: bold;
-  color: #000;
-  text-align: right;
-}
-
-#score-table .current-player .socket-id,
-#score-table .current-player .score-value {
-  color: #bdaa27;
-}
-
-@media screen and (min-width: 1024px) {
+@media screen and (max-width: 540px) {
+  header > h1 {
+    font-size: 1.3rem;
+  }
 }

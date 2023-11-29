@@ -90,7 +90,6 @@
       });
 
       socket.on("disconnect", () => {
-        console.log("Unsubscribing All");
         keyboardListener.unsubscribeAll();
         location.reload();
         /*
