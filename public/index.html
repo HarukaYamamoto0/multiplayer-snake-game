@@ -71,7 +71,7 @@
         setupScreen(screen, game);
         renderScreen(screen, scoreTable, game, requestAnimationFrame, playerId);
 
-        const autoMove = setInterval(checkLastMovement, 500);
+        const autoMove = setInterval(checkLastMovement, 450);
 
         function checkLastMovement() {
           const lastMovement = game.state.players[playerId].lastMovement;
@@ -83,20 +83,18 @@
               keyPressed: lastMovement,
             };
 
-            game.movePlayer(command);
             socket.emit("move-player", command);
+            game.movePlayer(command);
           }
         }
       });
 
       socket.on("disconnect", () => {
         keyboardListener.unsubscribeAll();
-        location.reload();
-        /*
-				if (confirm("You have been disconnected.\nPress OK to try to reconnect.")) {
-					location.reload();
-				}
-				*/
+
+        if (confirm("Você foi desconectado.\nPressione OK para tentar reconectar.")) {
+          location.reload();
+        }
       });
 
       socket.on("setup", (state) => {
@@ -135,7 +133,7 @@
       });
 
       function getNickName() {
-        const readNickName = sessionStorage.getItem("NickName") || prompt("Enter your nickname:");
+        const readNickName = sessionStorage.getItem("NickName") || prompt("Entre com seu apelido:");
 
         if (!readNickName) return getNickName();
 

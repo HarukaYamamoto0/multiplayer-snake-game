@@ -20,25 +20,30 @@ export default function renderScreen(screen, scoreTable, game, requestAnimationF
     for (let i = 0; player.body.length > i; i++) {
       const { x, y } = player.body[i];
 
-      context.fillStyle = "#8a2be2";
-      context.globalAlpha = 0.4;
-      context.fillRect(x, y, 1, 1);
-
-      if (i === 0) {
-        context.globalAlpha = 1;
-        context.fillRect(x, y, 1, 1);
-      }
-
       if (player.playerId === currentPlayerId) {
         context.fillStyle = "red";
+        context.globalAlpha = 0.4;
         context.fillRect(x, y, 1, 1);
 
         if (i === 0) {
           context.fillStyle = "red";
           context.globalAlpha = 1;
           context.fillRect(x, y, 1, 1);
+          continue;
         }
+        continue;
       }
+
+      if (i === 0) {
+        context.fillStyle = "#8a2be2";
+        context.globalAlpha = 1;
+        context.fillRect(x, y, 1, 1);
+        continue;
+      }
+
+      context.fillStyle = "#8a2be2";
+      context.globalAlpha = 0.4;
+      context.fillRect(x, y, 1, 1);
     }
   }
 
