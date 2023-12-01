@@ -67,7 +67,6 @@ header > h1 {
   vertical-align: top;
   display: inline-block;
   margin-bottom: 7vh;
-  max-height: 200px;
   font-family: "Cinzel", serif;
 }
 
@@ -107,6 +106,25 @@ header > h1 {
   box-shadow: 0 0 8px 4px rgba(245, 239, 239, 0.19);
 }
 
+@media screen and (max-width: 360px) {
+  header > h1 {
+    font-size: 1.3rem;
+  }
+
+  #score-table #scoretableTitle {
+    font-size: 1rem;
+  }
+
+  #score-table #scoretablePoints {
+    font-size: 1rem;
+  }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 1rem;
+  }
+}
+
 @media screen and (max-width: 375px) {
   header > h1 {
     font-size: 1.3rem;
@@ -122,7 +140,7 @@ header > h1 {
 
   #score-table td {
     padding-top: 15px;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 }
 
@@ -130,25 +148,67 @@ header > h1 {
   header > h1 {
     font-size: 1.4rem;
   }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 1rem;
+  }
 }
 
 @media screen and (max-width: 540px) {
   header > h1 {
     font-size: 1.3rem;
   }
+
+  #score-table #scoretableTitle {
+    font-size: 2rem;
+  }
+
+  #score-table #scoretablePoints {
+    font-size: 2rem;
+  }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 1rem;
+  }
 }
 
-@media screen and (max-width: 1020px) {
+@media screen and (max-width: 768px) {
   header > h1 {
     font-size: 1.3rem;
   }
 
   #score-table #scoretableTitle {
-    font-size: 0.9rem;
+    font-size: 4rem;
   }
 
   #score-table #scoretablePoints {
-    font-size: 0.9rem;
+    font-size: 4rem;
+  }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 4rem;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  header > h1 {
+    font-size: 1.5rem;
+  }
+
+  #score-table #scoretableTitle {
+    font-size: 1rem;
+  }
+
+  #score-table #scoretablePoints {
+    font-size: 1rem;
+  }
+
+  #score-table td {
+    padding-top: 15px;
+    font-size: 1rem;
   }
 
   #screen {
