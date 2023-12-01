@@ -4,7 +4,7 @@ export default function createGame(socket) {
   const state = {
     players: {},
     fruits: {},
-    maxFruits: 20,
+    maxFruits: 40,
     maximumNumberOfWinners: 3,
     screen: {
       width: 25,
