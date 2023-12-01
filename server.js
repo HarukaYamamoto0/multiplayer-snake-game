@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 app.use(cors());
 
-app.get("/", (req, res) => {
+app.get("/total", (req, res) => {
   res.json({ totalOfPlayers });
 });
 
