@@ -8,10 +8,16 @@ const app = express();
 const server = http.createServer(app);
 const sockets = socketio(server);
 
+let totalOfPlayers = 0;
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 app.use(cors());
+
+app.get("/", (req, res) => {
+  res.json({ totalOfPlayers });
+});
 
 const game = createGame();
 game.start();
@@ -38,6 +44,7 @@ sockets.on("connection", (socket) => {
 
     game.movePlayer(command);
   });
+  totalOfPlayers++;
 });
 
 server.listen(PORT, () => {
