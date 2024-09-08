@@ -1,6 +1,6 @@
 ## About The Project
 
-![Screen Shot](./images/screenshot.png)
+![Screen Shot](./images/screenshot.jpg)
 
 This is a simple game I created based on Felipe Dechamps' [playlist](https://www.youtube.com/playlist?list=PLMdYygf53DP5SVQQrkKCVWDS0TwYLVitL). I built it for a festival at my school so that people could play and enjoy it. While it's not perfect, the game is fully functional. If you're playing on a mobile device, just swipe in the direction you want the snake to move.
 
