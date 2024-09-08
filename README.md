@@ -15,19 +15,19 @@ This is a simple game I created based on Felipe Dechamps' [playlist](https://www
 ## 🔧 How to Run
 
 1. Clone the repository:
-    ```bash
+    ```sh
     git clone https://github.com/HarukaYamamoto0/multiplayer-snake-game.git
     ```
-2. Open it in Visual Studio Code:
-   ```bash
-   code ./multiplayer-snake-game
+2. Open the project
+   ```sh
+   cd ./multiplayer-snake-game
    ```
 3. Install the dependencies:
-   ```bash
+   ```sh
    npm install
    ```
 4. Start the server:
-   ```bash
+   ```sh
    npm run start
    ```
 5. Access the game at [localhost:3000](http://localhost:3000).
